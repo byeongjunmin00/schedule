@@ -40,4 +40,12 @@ public class ScheduleController {
         return ResponseEntity.ok(scheduleService.getSchedule(id));
     }
 
+    // 일정 수정 API
+    @PutMapping("/{id}") // PUT /schedules/1 이런 식으로 요청!
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto requestDto) {
+        // URL에서 id를 받고, Body에서 수정할 데이터를 받는다
+        return ResponseEntity.ok(scheduleService.updateSchedule(id, requestDto));
+    }
+
+
 }

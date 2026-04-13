@@ -1,6 +1,7 @@
 package org.example.schedule.service;
 
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.schedule.dto.ScheduleRequestDto;
 import org.example.schedule.dto.ScheduleResponseDto;
@@ -60,5 +61,25 @@ public class ScheduleService {
 
         return new ScheduleResponseDto(schedule);
 
+    }
+
+    // 일정 수정
+    @Transactional // DB 변경사항을 자동으로 저장함
+    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto) {
+
+        // 1. 일정 찾기
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
+
+        // 2. 비밀번호 확인
+        if (!schedule.getPassword().equals(requestDto.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // 3. 제목, 작성자명 수정
+        schedule.update(requestDto.getTitle(), requestDto.getAuthor());
+
+        // 4. 수정된 결과 반환
+        return new ScheduleResponseDto(schedule);
     }
 }
