@@ -42,7 +42,7 @@ public class ScheduleService {
         if (author != null) {
             // 작성자명 있으면 그 작성의 일정만 조회
             schedules = scheduleRepository.findByAuthorOrderByModifiedAtDesc(author);
-        }else {
+        } else {
             // 작성자명이 없으면 전체 조회
             schedules = scheduleRepository.findAllByOrderByModifiedAtDesc();
         }
@@ -81,5 +81,21 @@ public class ScheduleService {
 
         // 4. 수정된 결과 반환
         return new ScheduleResponseDto(schedule);
+    }
+
+    // 일정 삭제
+    public void deleteSchedule(Long id, String password) {
+
+        // 1. 일정 찾기
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
+
+        // 2. 비밀번호 확인
+        if (!schedule.getPassword().equals(password)) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // 3. 삭제
+        scheduleRepository.delete(schedule);
     }
 }

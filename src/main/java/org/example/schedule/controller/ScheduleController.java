@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController // API 요청을 받는 컨트롤러 라는 뜻
 @RequestMapping("/schedules") // schedules 경로로 들어오 요청처리
@@ -34,7 +35,7 @@ public class ScheduleController {
 
 
     // 선택 일정 조회 API
-    @GetMapping("/{id}") // 단건 조회이기 때문에 어떤 일정을 볼 건지 알려줘야하기 때문에 ID에 URL을 넣는
+    @GetMapping("/{id}") // 단건 조회이기 때문에 어떤 일정을 볼 건지 알려줘야하기 때문에 ID에 URL을 넣는다
     public ResponseEntity<ScheduleResponseDto> getSchedule(@PathVariable Long id) {
         // @PathVariable : URL에 있는 id값을 가져옴
         return ResponseEntity.ok(scheduleService.getSchedule(id));
@@ -47,5 +48,11 @@ public class ScheduleController {
         return ResponseEntity.ok(scheduleService.updateSchedule(id, requestDto));
     }
 
-
+    // 일정 삭제 API
+    @DeleteMapping("/{id}") // DELETE /schedule/1 이런 식으로 요청
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
+        // Body에서 비밀번호만 꺼내기
+        scheduleService.deleteSchedule(id, requestBody.get("password"));
+        return ResponseEntity.ok().build();
+    }
 }
