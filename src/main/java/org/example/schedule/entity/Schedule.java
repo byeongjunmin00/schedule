@@ -20,7 +20,7 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // ID 자동 증가
     private Long id;
 
-    @Column(nullable = false) // 필수 입력값! 이 필드 NULL 이면 안돼! 라는 뜻
+    @Column(nullable = false) // 필수 입력값 NULL 이면 안돼 라는 뜻
     private String title; // 일정 제목
 
     @Column(nullable = false)
@@ -51,6 +51,5 @@ public class Schedule {
     public void update(String title, String author) {
         this.title = title;
         this.author = author;
-
     }
 }
